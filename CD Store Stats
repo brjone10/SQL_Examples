@@ -1,0 +1,25 @@
+REATE TABLE cdstore (id INTEGER PRIMARY KEY, album TEXT, artist TEXT, genre TEXT, condition TEXT, price INTEGER);
+
+INSERT INTO cdstore VALUES (1, "Apolino", "Omar Apollo", "R&B", "New", 12.99);
+INSERT into cdstore VALUES (2, "Location", "Khalid", "R&B", "Used", 10.99);
+INSERT into cdstore VALUES (3, "Sob Rock", "John Mayer", "Rock", "New", 15.99);
+INSERT into cdstore VALUES (4, "Harry's House", "Harry Styles", "Rock", "New", 14.99);
+INSERT into cdstore VALUES (5, "Lychee", "Benee", "Pop", "Used", 12.99);
+INSERT into cdstore VALUES (6, "Bicostal", "Bathe", "R&B", "Used", 11.99);
+INSERT into cdstore VALUES (7, "The Space Between", "Majid Jordan", "R&B", "Used", 13.99);
+INSERT into cdstore VALUES (8, "Star-Crossed", "Kacey Musgraves", "Pop", "New", 15.99);
+INSERT into cdstore VALUES (9, "Another Day", "Fiji Blue", "Pop", "Used", 14.99);
+INSERT into cdstore VALUES (10, "October Sky", "Yeba", "R&B", "Used", 13.99);
+INSERT into cdstore VALUES (11, "Balance", "Kristie", "Pop", "New", 1.99);
+INSERT into cdstore VALUES (12, "Lemon", "Beyonce", "Pop", "Used", 15.99);
+INSERT into cdstore VALUES (13, "Man on the Moon", "Kid Cudi", "Rap", "Used", 13.99);
+INSERT into cdstore VALUES (14, "Puffer", "Cautious Clay", "Rap", "New", 1.99);
+INSERT into cdstore VALUES (15, "Based on a Feeling", "Sabrina Claudio", "R&B", "New", 12.99);
+
+-- What are the least expensive products by price?
+SELECT * FROM cdstore
+ORDER BY price asc;
+
+-- What is the maximum price of product? -- How many genres are there of each cd?
+SELECT MAX(price) FROM cdstore;
+SELECT (genre), COUNT(genre) from cdstore GROUP BY genre
