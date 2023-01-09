@@ -1,0 +1,22 @@
+--The orders placed between 02/13/19 and 02/18/19
+Select orderdate
+FROM BIT_DB.FebSales
+Where orderdate between '02/13/19 00' and '02/18/19 00'
+
+
+--The location of a particular order from 02/18/19 01:35’
+Select location
+FROM BIT_DB.FebSales
+Where orderdate = '02/18/19 01:35'
+
+--The amount of orders from 02/18/19
+Select sum(quantity)
+FROM BIT_DB.FebSales
+Where orderdate like ’02/18/19%’
+
+
+--Listing all the products sold in LA in February and how many were sold
+Select product, SUM(quantity)
+FROM BIT_DB.FebSales
+Where location like '%Los Angeles%'
+Group By Product
