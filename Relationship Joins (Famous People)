@@ -1,0 +1,37 @@
+CREATE TABLE famous_people (id INTEGER PRIMARY KEY, name TEXT, age INTEGER, profession TEXT, Relationship_status INTEGER, Partner_id INTEGER);
+
+INSERT INTO famous_people VALUES (1, "Omar Apollo", "25", "Artist", 1, NULL );
+INSERT INTO famous_people VALUES (2, "Beyonce Knowles", "40", "Artist", 2, 10);
+INSERT INTO famous_people VALUES (3, "Pink", "42", "Artist", 2, 4 );
+INSERT INTO famous_people VALUES (4, "Carey Hart", "47", "Motocross", 2, 3 );
+INSERT INTO famous_people VALUES (6, "Kourtney Kardashian", "43", "Media Personality", 2, 9 );
+INSERT INTO famous_people VALUES (7, "Justin Bieber", "28", "Artist", 2, 8 );
+INSERT INTO famous_people VALUES (8, "Hailey Bieber", "28", "Model", 2, 7 );
+INSERT INTO famous_people VALUES (9, "Travis Barker", "46", "Drummer", 2, 6 );
+INSERT INTO famous_people VALUES (10, "Jay-Z", "52", "Rapper", 2, 2);
+INSERT INTO famous_people VALUES (11, "Sabrina Claudio", "25", "Artist", 1, NULL);
+
+CREATE TABLE relationship (id INTEGER PRIMARY KEY,
+    famous_person_id INTEGER,
+    status TEXT);
+    
+INSERT INTO relationship (famous_person_id, status)
+    VALUES (1, "Single");
+INSERT INTO relationship (famous_person_id, status)
+    VALUES (2, "Married");
+
+
+-- Left Join to determine the names of the famous people and their relationship status
+Select famous_people.name, relationship.status AS relationship_status
+FROM famous_people
+LEFT OUTER JOIN relationship
+ON famous_people.relationship_status = relationship.id;
+
+Select id, name, partner_id 
+FROM famous_people;
+
+-- Joining table to itself - Names of celebrities and their partners 
+Select famous_people.name, partners.name AS partners_name
+FROM famous_people
+JOIN famous_people partners
+ON famous_people.partner_id = partners.id;
