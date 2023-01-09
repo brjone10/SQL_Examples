@@ -1,0 +1,76 @@
+With Spotify data from Kaggle, I utilized the following table for this project: 
+
+
+CREATE TABLE BIT_DB.Spotifydata (
+id integer PRIMARY KEY,
+artist_name varchar NOT NULL,
+track_name varchar NOT NULL,
+track_id varchar NOT NULL,
+popularity integer NOT NULL,
+danceability decimal(4,3) NOT NULL,
+energy decimal(4,3) NOT NULL,
+key integer NOT NULL,
+loudness decimal(5,3) NOT NULL,
+mode integer NOT NULL,
+speechiness decimal(5,4) NOT NULL,
+acousticness decimal(6,5) NOT NULL,
+instrumentalness text NOT NULL,
+liveness decimal(5,4) NOT NULL,
+valence decimal(4,3) NOT NULL,
+tempo decimal(6,3) NOT NULL,
+duration_ms integer NOT NULL,
+time_signature integer NOT NULL 
+)
+
+
+--Average danceability by artist
+select artist_name, 
+AVG(danceability)
+From BIT_DB.Spotifydata
+Group by artist_name
+Order by danceability desc
+
+
+--Artist and track with the most danceability
+select artist_name, track_name,
+MAX(danceability)
+From BIT_DB.Spotifydata
+Group by artist_name
+Order by danceability desc
+
+--The top 10 most popular artists 
+Select artist_name, popularity
+From BIT_DB.Spotifydata
+Group by artist_name
+Order by popularity desc
+Limit 10
+
+--Top five longest songs
+Select artist_name, track_name, duration_ms
+From BIT_DB.Spotifydata
+Group by artist_name
+Order by duration_ms desc
+Limit 5
+
+--The Average energy for the 10 least popular songs
+Select artist_name, track_name, popularity, energy,
+AVG(energy)
+FROM BIT_DB.Spotifydata
+Group by artist_name, track_name
+Order by popularity asc
+Limit 10
+
+—CTE with the average popularity for artist and artists with an average popularity of 90 or more are labeled as Top Stars
+
+WITH average_popularity_CTE AS (
+select s.artist_name,
+AVG(s.popularity) as popularity_avg
+from Spotifydata s
+group by artist_name
+)
+
+select artist_name, 
+popularity_avg,
+'Top Star' AS tag
+from average_popularity_CTE
+Where popularity_avg >=90;
