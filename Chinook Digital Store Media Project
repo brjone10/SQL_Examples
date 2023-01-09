@@ -1,0 +1,122 @@
+--Customer id full name from customers not in US
+ Select customerid, firstname, lastname, country
+ from chinook.customers
+ where country <> ‘%USA%’;
+
+ -- Customers from Brazil
+ Select customerid, firstname, lastname, country
+ from chinook.customers
+ where country = ‘Brazil’;
+
+ --Invoice information from US customers
+ Select cust.FirstName, cust.LastName, inv.InvoiceID, inv.InvoiceDate, inv.BillingCountry
+ From chinook.invoices as inv
+ LEFT JOIN chinook.customers as cust
+ ON inv.CustomerId = cust.CustomerID
+ Where inv.BillingCountry = ‘USA’;
+
+ --Employees that are Sales Support Agents
+ Select FirstName, LastName, Title
+ From chinook.employees
+ Where title = 'Sales Support Agent’;
+
+ --A unique/distinct list of billing countries and the invoiceId
+ Select InvoiceId, BillingCountry
+ From chinook.invoices
+ Group by BillingCountry
+ Order by InvoiceId Asc;
+
+ or
+
+ Select distinct BillingCountry FROM chinook.invoices
+
+ -- Invoices associated with Sales agents through multiple joins
+ Select employees.FirstName, employees.LastName, invoices.InvoiceId
+ FROM chinook.employees
+ Join chinook.customers ON customers.SupportRepId = employees.employeeId
+ Join chinook.invoices ON invoices.CustomerId = customers.CustomerId;
+
+ -- The Sales agent, invoice totals, and customers associated with each sale
+ Select Employees.FirstName, Employees.LastName, Invoices.total,
+ Customers.FirstName, Customers.LastName
+ From chinook.Employees
+ Join chinook.Customers ON Customers.SupportRepId = Employees.EmployeeId
+ Join chinook.Invoices ON Invoices.CustomerId = Customers.CustomerId
+
+ -- The number of invoices placed in 2009
+ Select COUNT (*) 
+ FROM chinook.invoices
+ WHERE InvoiceDate BETWEEN '2009-01-01 00:00:00' and '2009-12-31 00:00:00’
+
+ -- Total sales for 2009
+ Select SUM (total) as total_sales_2009
+ FROM chinook.invoices
+ WHERE InvoiceDate BETWEEN '2009-01-01 00:00:00' and '2009-12-31 00:00:00’
+
+ — Purchased track name with the invoice line item
+ Select Tracks.Name, invoice_items.InvoiceLineId
+ From chinook.tracks
+ LEFT JOIN chinook.invoice_items
+ ON tracks.TrackId = invoice_items.TrackId
+
+ -- Artist and track for each invoice line item
+ Select Artists.Name as Artist,
+ Tracks.Name as TrackName, 
+ invoice_items.InvoiceLineId
+ From chinook.Artists
+ JOIN chinook.Albums ON Artists.ArtistId = Albums.ArtistId
+ JOIN chinook.Tracks ON Albums.AlbumId = Tracks.AlbumId
+ JOIN chinook.Invoice_items ON Tracks.TrackId = Invoice_items.TrackId
+
+
+ --Showing all tracks with album title, media type, and genre
+ Select tracks.name as trackname, 
+ albums.title as albumtitle, 
+ media_types.name as mediatype, 
+ genres.name as genre
+ From chinook.tracks
+ Join chinook.albums ON albums.albumid = tracks.albumid
+ Join chinook.media_types ON media_types.mediatypeid = tracks.mediatypeid
+ Join chinook.genres ON genres.genreid = tracks.genreid
+
+
+ --Total sales for each employee
+ Select employees.FirstName, 
+ employees.LastName, 
+ ROUND(SUM(total)) as TotalSales
+ from chinook.invoices
+ join chinook.customers on customers.customerid = invoices.customerid
+ join chinook.employees on employees.employeeid = customers.supportrepid
+ Group by employees.employeeid
+
+ or
+
+ SELECT employees.FirstName, employees.LastName,
+ ROUND(SUM(Invoices.Total), 2) as 'Total Sales' 
+ FROM chinook.Employees 
+
+ JOIN chinook.Customers ON customers.SupportRepId = employees.EmployeeId
+ JOIN chinook.Invoices ON Invoices.CustomerId = customers.CustomerId
+
+ WHERE employees.Title = 'Sales Support Agent' 
+ GROUP BY employees.FirstName;
+
+ -- Sales Agent with the most sales in 2009
+ SELECT employees.FirstName, employees.LastName,
+ ROUND(SUM(Invoices.Total), 2) as 'Total Sales' 
+ FROM chinook.Employees 
+ JOIN chinook.Customers ON customers.SupportRepId = employees.EmployeeId
+ JOIN chinook.Invoices ON Invoices.CustomerId = customers.CustomerId
+ WHERE employees.Title = 'Sales Support Agent' 
+ AND InvoiceDate between '2009-01-01 00:00:00' and '2009-12-31 00:00:00'
+ GROUP BY employees.FirstName
+ ORDER BY (ROUND(SUM(Invoices.Total), 2)) desc
+
+
+ --Track names on a particular playlist
+ Select playlists.name as 'playlist name',
+ tracks.name as 'track name'
+ from chinook.playlists
+ join chinook.playlist_track on playlist_track.playlistid = playlists.playlistid
+ join chinook.tracks on tracks.trackid = playlist_track.trackid
+ Group by tracks.name
